@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/*
+ * Signal — design tokens.
+ * Raw values live on :root so they can be swapped per theme; @theme inline
+ * maps them to Tailwind utilities (bg-bg, text-muted, border-line, ...).
+ * Contrast ratios (WCAG 2.x) are noted against --bg / --surface.
+ */
+:root {
+  color-scheme: dark light;
+
+  --bg: #0b0c0e;
+  --surface: #14161a;
+  --line: #2a2e35; /* decorative rules only (1.4:1) */
+  --line-strong: #666a72; /* form controls, 3.6 / 3.3:1 */
+  --fg: #edeae3; /* 16.3 / 15.1:1 */
+  --muted: #9c9a94; /* 6.9 / 6.4:1 */
+  --signal: #ff5b1f; /* 6.3 / 5.8:1 */
+  --on-signal: #0b0c0e;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #edeae3;
+    --surface: #e2ded5;
+    --line: #c9c4b8;
+    --line-strong: #7e796f; /* 3.6 / 3.2:1 */
+    --fg: #0b0c0e; /* 16.3 / 14.6:1 */
+    --muted: #5a5852; /* 5.9 / 5.3:1 */
+    --signal: #a93509; /* 5.5 / 4.9:1 */
+    --on-signal: #edeae3;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-signal: var(--signal);
+  --color-on-signal: var(--on-signal);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-archivo), var(--font-geist-sans), sans-serif;
+}
+
+@theme {
+  /* Hero name: "MUHAMMAD" at 125% width measures 8.04em, so the size is
+     derived from the content width (viewport minus gutters) / 8.3 to
+     guarantee it never overflows, capped where the 1440px container stops. */
+  --text-display-hero: clamp(2rem, calc((100vw - 3rem) / 8.3), 10.5rem);
+  --text-display-hero--line-height: 0.86;
+  --text-display-hero--letter-spacing: -0.02em;
+
+  /* Fluid display scale: grows with the viewport, clamped at both ends. */
+  --text-display-xl: clamp(3rem, 12.4vw, 12.5rem);
+  --text-display-xl--line-height: 0.86;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-lg: clamp(1.75rem, 7.5vw, 7rem);
+  --text-display-lg--line-height: 0.92;
+  --text-display-lg--letter-spacing: -0.015em;
+  --text-display-md: clamp(1.75rem, 3.6vw, 3.25rem);
+  --text-display-md--line-height: 1.02;
+  --text-display-md--letter-spacing: -0.01em;
+  --text-annotation: 0.6875rem;
+  --text-annotation--line-height: 1.4;
+  --text-annotation--letter-spacing: 0.08em;
+
+  /* Motion tokens (used by CSS now, mirrored for GSAP in a later phase). */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--bg);
+    color: var(--fg);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* Safety net: a long single word in a display heading wraps instead of
+     forcing the page to scroll sideways on small phones. */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+  }
+
+  ::selection {
+    background-color: var(--signal);
+    color: var(--on-signal);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+}
