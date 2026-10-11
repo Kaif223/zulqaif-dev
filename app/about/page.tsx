@@ -1,119 +1,131 @@
+import type { ReactNode } from "react";
 import { activeSocials, site } from "@/content/site";
-import { bio, experience } from "@/content/profile";
+import { bio, education, experience, focus, stack } from "@/content/profile";
 import { pageMetadata } from "@/lib/metadata";
-import { Annotation } from "@/components/ui/annotation";
+import { ExternalButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { SectionHeader } from "@/components/ui/section-header";
-import { PageIntro } from "@/components/page-intro";
-import { Capabilities } from "@/components/sections/capabilities";
-import { Principles } from "@/components/sections/principles";
+import { Section, SectionHeading } from "@/components/ui/section";
+import { socialIcons } from "@/components/ui/icons";
+import { Capabilities } from "@/components/home/capabilities";
+import { Approach } from "@/components/home/approach";
+import { ExperienceList } from "@/components/profile/experience-list";
+import { ContactCta } from "@/components/contact-cta";
 
 export const metadata = pageMetadata({
   title: "About",
-  description: `About ${site.name}: a product frontend and creative developer based in ${site.location.city}, ${site.location.country}.`,
+  description: `About ${site.name}: a frontend developer in ${site.location.city}, ${site.location.country}, working with React, Next.js and TypeScript.`,
   path: "/about",
 });
+
+const currentRole = experience.find((entry) => entry.current);
+const degree = education[0];
 
 export default function AboutPage() {
   return (
     <>
-      <PageIntro index="02" label="About" title="About" />
+      <Container className="pt-12 sm:pt-16 lg:pt-20">
+        <SectionHeading
+          as="h1"
+          id="about-title"
+          eyebrow="About"
+          title="Frontend developer focused on clear, dependable interfaces."
+        />
 
-      <div className="border-b border-line">
-        <Container className="grid gap-10 py-16 sm:py-24 md:grid-cols-12 md:gap-6">
-          <dl className="space-y-6 md:col-span-4">
-            <div>
-              <Annotation as="dt">Based in</Annotation>
-              <dd className="mt-2">
-                {site.location.city}, {site.location.country}
-                <span className="block font-mono text-sm text-muted">
-                  {site.location.timeZoneLabel}
-                </span>
-              </dd>
-            </div>
-            <div>
-              <Annotation as="dt">Roles</Annotation>
-              <dd className="mt-2">{site.roles.join(" · ")}</dd>
-            </div>
-            <div>
-              <Annotation as="dt">Availability</Annotation>
-              <dd className="mt-2">{site.availability}</dd>
-            </div>
-          </dl>
-          <div className="space-y-6 text-xl leading-relaxed md:col-span-7 md:col-start-6">
+        <div className="grid gap-10 pb-16 sm:pb-20 lg:grid-cols-12 lg:gap-12">
+          <div className="space-y-5 text-lg text-ink-soft lg:col-span-7">
             {bio.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-            {site.resumePath || activeSocials.length > 0 ? (
-              <ul className="flex flex-wrap gap-x-6 gap-y-2 pt-4 font-mono text-sm">
-                {site.resumePath ? (
-                  <li>
-                    <a
-                      href={site.resumePath}
-                      className="underline decoration-line-strong underline-offset-4 transition-colors hover:text-signal"
-                    >
-                      Download CV (PDF)
-                    </a>
-                  </li>
-                ) : null}
-                {activeSocials.map((social) => (
-                  <li key={social.href}>
-                    <a
-                      href={social.href}
-                      rel="me noopener"
-                      className="underline decoration-line-strong underline-offset-4 transition-colors hover:text-signal"
-                    >
-                      {social.label} <span aria-hidden="true">↗</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            <div className="rounded-card border border-line bg-surface p-6 shadow-card">
+              <h2 className="font-mono text-label text-accent-ink uppercase">Focus</h2>
+              <p className="mt-2 text-ink">{focus}</p>
+            </div>
           </div>
-        </Container>
-      </div>
 
-      {experience.length > 0 ? (
-        <section aria-labelledby="experience-title" className="border-b border-line">
-          <Container className="py-20 sm:py-28">
-            <SectionHeader index="01" label="Experience" id="experience-title" title="Experience" />
-            <ol className="border-b border-line">
-              {experience.map((entry) => (
-                <li
-                  key={`${entry.company}-${entry.period}`}
-                  className="grid gap-3 border-t border-line py-8 md:grid-cols-12 md:gap-6"
-                >
-                  <Annotation className="tabular-nums md:col-span-3">{entry.period}</Annotation>
-                  <div className="md:col-span-8 md:col-start-5">
-                    <h3 className="text-2xl font-medium">
-                      {entry.role} <span className="text-muted">— {entry.company}</span>
-                    </h3>
-                    {entry.location ? (
-                      <p className="mt-1 font-mono text-sm text-muted">{entry.location}</p>
-                    ) : null}
-                    <p className="mt-4 text-muted">{entry.summary}</p>
-                    {entry.highlights && entry.highlights.length > 0 ? (
-                      <ul className="mt-4 space-y-2 text-muted">
-                        {entry.highlights.map((highlight) => (
-                          <li key={highlight} className="flex gap-3">
-                            <span aria-hidden="true" className="font-mono text-line-strong">
-                              —
-                            </span>
-                            {highlight}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </Container>
-        </section>
-      ) : null}
+          <aside aria-label="Quick facts" className="lg:col-span-5">
+            <dl className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
+              <Fact label="Based in">
+                {site.location.city}, {site.location.country}
+                <span className="block text-sm text-ink-soft">{site.location.timeZoneLabel}</span>
+              </Fact>
+              {currentRole ? (
+                <Fact label="Current role">
+                  {currentRole.role}
+                  <span className="block text-sm text-ink-soft">{currentRole.company}</span>
+                </Fact>
+              ) : null}
+              {degree ? (
+                <Fact label="Education">
+                  {degree.degree}
+                  <span className="block text-sm text-ink-soft">
+                    {degree.institutionShort} · completed {degree.completed}
+                  </span>
+                </Fact>
+              ) : null}
+              <Fact label="Profiles">
+                <ul className="flex flex-wrap gap-2">
+                  {activeSocials.map(({ label, href }) => {
+                    const Icon = socialIcons[label];
+                    return (
+                      <li key={href}>
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="me noopener noreferrer"
+                          className="inline-flex min-h-10 items-center gap-2 rounded-full border border-line px-3.5 text-sm hover:border-line-strong"
+                        >
+                          <Icon className="size-4" />
+                          {label}
+                          <span className="sr-only">(opens in a new tab)</span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Fact>
+            </dl>
+            {site.resumePath ? (
+              <ExternalButtonLink href={site.resumePath} className="mt-4 w-full" icon="arrow">
+                Download CV (PDF)
+              </ExternalButtonLink>
+            ) : null}
+          </aside>
+        </div>
+      </Container>
 
-      <Capabilities />
-      <Principles showAboutLink={false} />
+      <Section labelledBy="about-experience-title" className="border-t border-line">
+        <SectionHeading id="about-experience-title" eyebrow="Background" title="Experience & education" />
+        <ExperienceList />
+      </Section>
+
+      <Capabilities id="about-capabilities" />
+
+      <Section labelledBy="toolkit-title" className="pt-0!">
+        <div data-reveal className="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8">
+          <h2 id="toolkit-title" className="font-mono text-label text-ink-soft uppercase">
+            Main technologies
+          </h2>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {stack.map((tech) => (
+              <li key={tech} className="rounded-full border border-line bg-bg px-3.5 py-1.5 text-sm text-ink">
+                {tech}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+
+      <Approach id="about-approach" />
+      <ContactCta id="about-contact" />
     </>
+  );
+}
+
+function Fact({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="grid gap-1 px-6 py-5 sm:grid-cols-[8rem_1fr] sm:gap-4">
+      <dt className="font-mono text-label text-ink-soft uppercase sm:pt-1">{label}</dt>
+      <dd className="text-ink">{children}</dd>
+    </div>
   );
 }

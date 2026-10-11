@@ -1,83 +1,96 @@
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 import { activeSocials, site } from "@/content/site";
-import { Annotation } from "@/components/ui/annotation";
-import { ArrowLink } from "@/components/ui/arrow-link";
 import { Container } from "@/components/ui/container";
-import { LocalTime } from "@/components/local-time";
+import { ArrowUp, MailIcon, socialIcons } from "@/components/ui/icons";
 
-const sitemap = [
-  { href: "/", label: "Index" },
+const pages = [
+  { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
+// Cache Components doesn't allow reading the clock during prerender, so the
+// year is computed inside a cached scope and refreshed daily.
+async function CopyrightYear() {
+  "use cache";
+  cacheLife("days");
+  return <>{new Date().getFullYear()}</>;
+}
+
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-line">
-      <Container className="py-16 sm:py-24">
-        <Annotation>[∞] Next step</Annotation>
-        <p className="mt-6 max-w-5xl font-display text-display-lg font-extrabold uppercase [font-stretch:118%]">
-          Let&apos;s build something precise.
-        </p>
-        <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-          <ArrowLink href="/contact">Start a conversation</ArrowLink>
-          {site.email ? (
-            <a
-              href={`mailto:${site.email}`}
-              className="font-mono text-sm text-fg underline decoration-line-strong underline-offset-4 transition-colors hover:text-signal"
-            >
-              {site.email}
-            </a>
-          ) : null}
-        </div>
-
-        <div className="mt-16 grid gap-10 border-t border-line pt-8 sm:grid-cols-3">
-          <div>
-            <Annotation as="span" className="block">
-              Based in
-            </Annotation>
-            <p className="mt-3 font-mono text-sm">
-              {site.location.city}, {site.location.country}
-              <br />
-              <LocalTime />
+    <footer className="border-t border-line bg-surface">
+      <Container className="py-12 sm:py-16">
+        <div className="grid gap-10 md:grid-cols-12">
+          <div className="md:col-span-6 lg:col-span-5">
+            <p className="text-xl font-semibold tracking-tight">
+              {site.wordmark}
+              <span className="text-accent">.</span>
             </p>
+            <p className="mt-4 font-medium text-ink">
+              {site.name} — {site.role}
+            </p>
+            <p className="mt-2 max-w-sm text-ink-soft">{site.footerStatement}</p>
           </div>
-          <nav aria-label="Footer">
-            <Annotation as="span" className="block">
-              Sitemap
-            </Annotation>
-            <ul className="mt-3 space-y-1 font-mono text-sm">
-              {sitemap.map(({ href, label }) => (
+
+          <nav aria-label="Footer" className="md:col-span-3 lg:col-start-8">
+            <h2 className="font-mono text-label text-ink-soft uppercase">Pages</h2>
+            <ul className="mt-4 space-y-1">
+              {pages.map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="transition-colors hover:text-signal">
+                  <Link href={href} className="inline-flex min-h-10 items-center text-ink hover:text-accent-ink">
                     {label}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
-          {activeSocials.length > 0 ? (
-            <div>
-              <Annotation as="span" className="block">
-                Elsewhere
-              </Annotation>
-              <ul className="mt-3 space-y-1 font-mono text-sm">
-                {activeSocials.map(({ href, label }) => (
+
+          <div className="md:col-span-3">
+            <h2 className="font-mono text-label text-ink-soft uppercase">Connect</h2>
+            <ul className="mt-4 space-y-1">
+              {activeSocials.map(({ label, href }) => {
+                const Icon = socialIcons[label];
+                return (
                   <li key={href}>
-                    <a href={href} rel="me noopener" className="transition-colors hover:text-signal">
-                      {label} <span aria-hidden="true">↗</span>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="me noopener noreferrer"
+                      className="inline-flex min-h-10 items-center gap-2.5 text-ink hover:text-accent-ink"
+                    >
+                      <Icon className="size-4" />
+                      {label}
+                      <span className="sr-only">(opens in a new tab)</span>
                     </a>
                   </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+                );
+              })}
+              {site.email ? (
+                <li>
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="inline-flex min-h-10 items-center gap-2.5 text-ink hover:text-accent-ink"
+                  >
+                    <MailIcon className="size-4" />
+                    Email
+                  </a>
+                </li>
+              ) : null}
+            </ul>
+          </div>
         </div>
 
-        <div className="mt-16 flex flex-wrap justify-between gap-4">
-          <Annotation as="span">© {site.name}</Annotation>
-          <Annotation as="span">{site.location.coordinates}</Annotation>
+        <div className="mt-12 flex flex-col-reverse gap-4 border-t border-line pt-6 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © <CopyrightYear /> {site.name}. {site.location.city}, {site.location.country}.
+          </p>
+          <a href="#top" className="inline-flex min-h-10 items-center gap-2 self-start text-ink hover:text-accent-ink sm:self-auto">
+            Back to top
+            <ArrowUp className="size-4" />
+          </a>
         </div>
       </Container>
     </footer>

@@ -1,81 +1,96 @@
 import { activeSocials, site } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
-import { Annotation } from "@/components/ui/annotation";
 import { Container } from "@/components/ui/container";
-import { PageIntro } from "@/components/page-intro";
+import { SectionHeading } from "@/components/ui/section";
+import { MailIcon, MapPinIcon, socialIcons } from "@/components/ui/icons";
 import { LocalTime } from "@/components/local-time";
-import { ContactBrief } from "@/components/contact-brief";
+import { ContactForm } from "@/components/contact/contact-form";
 
 export const metadata = pageMetadata({
   title: "Contact",
-  description: `Get in touch with ${site.name} about full-time frontend roles or freelance projects.`,
+  description: `Contact ${site.name} about freelance frontend projects or full-time and contract roles.`,
   path: "/contact",
 });
 
 export default function ContactPage() {
   return (
-    <>
-      <PageIntro index="03" label="Contact" title="Let's talk">
-        <p>
-          Hiring for a frontend or creative developer role, or planning a project? Send a short brief —
-          I read every message.
-        </p>
-      </PageIntro>
+    <Container className="pt-12 pb-16 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-24">
+      <SectionHeading
+        as="h1"
+        id="contact-title"
+        eyebrow="Contact"
+        title="Let's build something useful together."
+        description="Tell me about your project or role. I work with product teams, startups and clients — in Pakistan and internationally."
+      />
 
-      <Container className="grid gap-14 py-16 sm:py-24 md:grid-cols-12 md:gap-6">
-        <aside className="space-y-8 md:col-span-4" aria-label="Contact details">
-          <div>
-            <Annotation>Email</Annotation>
-            {site.email ? (
-              <a
-                href={`mailto:${site.email}`}
-                className="mt-2 inline-block break-all text-xl underline decoration-line-strong underline-offset-4 transition-colors hover:text-signal"
-              >
-                {site.email}
-              </a>
-            ) : (
-              <p className="mt-2 text-muted">Email address coming soon.</p>
-            )}
-          </div>
-          <div>
-            <Annotation>Local time</Annotation>
-            <p className="mt-2 font-mono">
-              <LocalTime />
-            </p>
-            <p className="mt-1 text-sm text-muted">
-              {site.location.city}, {site.location.country}
-            </p>
-          </div>
-          {activeSocials.length > 0 ? (
-            <div>
-              <Annotation>Elsewhere</Annotation>
-              <ul className="mt-2 space-y-1">
-                {activeSocials.map((social) => (
-                  <li key={social.href}>
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+        <aside aria-labelledby="contact-methods-title" className="space-y-4 lg:col-span-5">
+          <div className="rounded-card border border-line bg-surface p-6 shadow-card">
+            <h2 id="contact-methods-title" className="font-mono text-label text-ink-soft uppercase">
+              Reach me directly
+            </h2>
+            <ul className="mt-4 space-y-2">
+              {site.email ? (
+                <li>
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="flex min-h-12 items-center gap-3 rounded-xl px-3 hover:bg-subtle"
+                  >
+                    <MailIcon className="size-5 text-accent-ink" />
+                    <span className="break-all">{site.email}</span>
+                  </a>
+                </li>
+              ) : null}
+              {activeSocials.map(({ label, href, handle }) => {
+                const Icon = socialIcons[label];
+                return (
+                  <li key={href}>
                     <a
-                      href={social.href}
-                      rel="me noopener"
-                      className="transition-colors hover:text-signal"
+                      href={href}
+                      target="_blank"
+                      rel="me noopener noreferrer"
+                      className="flex min-h-12 items-center gap-3 rounded-xl px-3 hover:bg-subtle"
                     >
-                      {social.label} <span aria-hidden="true">↗</span>
+                      <Icon className="size-5" />
+                      <span>
+                        <span className="font-medium text-ink">{label}</span>
+                        <span className="block text-sm text-ink-soft">{handle}</span>
+                      </span>
+                      <span className="sr-only">(opens in a new tab)</span>
                     </a>
                   </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+                );
+              })}
+            </ul>
+          </div>
+
+          <div className="rounded-card border border-line bg-surface p-6 shadow-card">
+            <h2 className="font-mono text-label text-ink-soft uppercase">Location</h2>
+            <p className="mt-3 inline-flex items-center gap-2 text-ink">
+              <MapPinIcon className="size-5 text-accent-ink" />
+              {site.location.city}, {site.location.country}
+            </p>
+            <p className="mt-1 pl-7 text-sm text-ink-soft">
+              Local time <LocalTime />
+            </p>
+          </div>
         </aside>
 
-        <section aria-labelledby="brief-title" className="md:col-span-7 md:col-start-6">
-          <h2 id="brief-title" className="text-2xl font-medium">
-            Write a brief
+        <section
+          aria-labelledby="enquiry-title"
+          className="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8 lg:col-span-7"
+        >
+          <h2 id="enquiry-title" className="text-h3 font-semibold">
+            Project enquiry
           </h2>
-          <p className="mt-2 text-muted">
-            This opens a pre-filled email in your mail app. Nothing is sent or stored by this site.
+          <p className="mt-1 text-ink-soft">
+            {site.email
+              ? "Submitting opens a ready-to-send email in your own mail app — this site doesn't store or send anything."
+              : "Email delivery isn't set up on this site yet, so this form can't send a message. It will tell you where to reach me instead."}
           </p>
-          <ContactBrief email={site.email} />
+          <ContactForm email={site.email} linkedInUrl={activeSocials.find((s) => s.label === "LinkedIn")?.href} />
         </section>
-      </Container>
-    </>
+      </div>
+    </Container>
   );
 }

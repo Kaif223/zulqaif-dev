@@ -13,8 +13,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const project = getProject(slug);
 
   return renderOgImage({
-    eyebrow: project?.kind === "concept" ? "Concept project" : "Case study",
+    eyebrow: project ? `Case study · ${project.category}` : "Case study",
     title: project?.title ?? "Work",
-    footer: project ? `${project.track} · ${project.year}` : "Work",
+    footer: project ? `${project.stack.slice(0, 3).join(" · ")} · ${project.year}` : "Work",
+    concept: project?.kind === "concept",
   });
 }

@@ -1,50 +1,68 @@
 import type { Metadata } from "next";
-import { projects } from "@/content/projects";
+import { featuredProjects } from "@/content/projects";
 import { site } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
-import { ArrowLink } from "@/components/ui/arrow-link";
-import { Container } from "@/components/ui/container";
-import { SectionHeader } from "@/components/ui/section-header";
-import { ProjectList } from "@/components/project-list";
-import { Hero } from "@/components/sections/hero";
-import { Capabilities } from "@/components/sections/capabilities";
-import { Principles } from "@/components/sections/principles";
-
-const homeMetadata = pageMetadata({
-  title: site.roles.join(" & "),
-  description: site.description,
-  path: "/",
-});
+import { ButtonLink } from "@/components/ui/button";
+import { Section, SectionHeading } from "@/components/ui/section";
+import { Hero } from "@/components/home/hero";
+import { Capabilities } from "@/components/home/capabilities";
+import { Approach } from "@/components/home/approach";
+import { ProjectCard } from "@/components/work/project-card";
+import { ExperienceList } from "@/components/profile/experience-list";
+import { ContactCta } from "@/components/contact-cta";
 
 export const metadata: Metadata = {
-  ...homeMetadata,
+  ...pageMetadata({
+    title: site.role,
+    description: site.description,
+    path: "/",
+  }),
   // The home page uses the full title instead of the "%s — Name" template.
-  title: { absolute: `${site.name} — ${site.roles.join(" & ")}` },
+  title: { absolute: `${site.name} — ${site.role}` },
 };
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <section id="work" aria-labelledby="work-title" className="border-b border-line">
-        <Container className="py-20 sm:py-28">
-          <SectionHeader
-            index="01"
-            label="Work"
-            id="work-title"
-            title="Selected work"
-            aside={`(${String(projects.length).padStart(2, "0")})`}
-          />
-          <ProjectList projects={projects} />
-          <div className="mt-10">
-            <ArrowLink href="/work" variant="secondary">
+
+      <Section id="work" labelledBy="work-title" className="pt-6! sm:pt-8! lg:pt-10!">
+        <SectionHeading
+          id="work-title"
+          eyebrow="Selected work"
+          title="Recent projects"
+          description="Real projects from my GitHub, each with a case study — plus a clearly labelled concept."
+          action={
+            <ButtonLink href="/work" variant="secondary">
               All work
-            </ArrowLink>
-          </div>
-        </Container>
-      </section>
+            </ButtonLink>
+          }
+        />
+        <div className="grid gap-6 md:grid-cols-2">
+          {featuredProjects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
+      </Section>
+
       <Capabilities />
-      <Principles />
+      <Approach />
+
+      <Section labelledBy="experience-title">
+        <SectionHeading
+          id="experience-title"
+          eyebrow="Experience"
+          title="Experience & education"
+          action={
+            <ButtonLink href="/about" variant="secondary">
+              More about me
+            </ButtonLink>
+          }
+        />
+        <ExperienceList />
+      </Section>
+
+      <ContactCta />
     </>
   );
 }

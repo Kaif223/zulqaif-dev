@@ -7,11 +7,13 @@ type OgCardProps = {
   eyebrow: string;
   title: string;
   footer: string;
+  concept?: boolean;
 };
 
-// Shared layout for generated social images (Satori supports a flexbox
-// subset only, so every element with several children sets display: flex).
-export function renderOgImage({ eyebrow, title, footer }: OgCardProps) {
+// Shared layout for generated social images, matching the light design
+// system. Satori supports a flexbox subset only, so every element with
+// several children sets display: flex.
+export function renderOgImage({ eyebrow, title, footer, concept }: OgCardProps) {
   return new ImageResponse(
     (
       <div
@@ -19,55 +21,64 @@ export function renderOgImage({ eyebrow, title, footer }: OgCardProps) {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: 64,
-          background: "#0b0c0e",
-          color: "#edeae3",
+          padding: 48,
+          background: "#f8f8f5",
           fontFamily: "sans-serif",
         }}
       >
         <div
           style={{
+            flex: 1,
             display: "flex",
+            flexDirection: "column",
             justifyContent: "space-between",
-            fontSize: 22,
-            letterSpacing: 2,
-            textTransform: "uppercase",
-            color: "#9c9a94",
+            padding: 56,
+            background: "#ffffff",
+            border: "1px solid #e5e5e0",
+            borderRadius: 32,
           }}
         >
-          <span>{eyebrow}</span>
-          <span>{site.location.coordinates}</span>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 26, color: "#666666" }}>
+              <div style={{ width: 12, height: 12, borderRadius: 999, background: "#f26522" }} />
+              {eyebrow}
+            </div>
+            {concept ? (
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: 22,
+                  color: "#b6461a",
+                  background: "#fdf0e8",
+                  border: "2px dashed #b6461a",
+                  borderRadius: 999,
+                  padding: "6px 18px",
+                }}
+              >
+                Concept project
+              </div>
+            ) : null}
+          </div>
           <div
             style={{
-              fontSize: title.length > 24 ? 76 : 104,
-              fontWeight: 800,
-              lineHeight: 0.95,
-              textTransform: "uppercase",
+              display: "flex",
+              fontSize: title.length > 48 ? 58 : 68,
+              fontWeight: 600,
+              lineHeight: 1.08,
               letterSpacing: -2,
+              color: "#171717",
+              maxWidth: 940,
             }}
           >
             {title}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
-            <div style={{ height: 2, width: 560, background: "#2a2e35" }} />
-            <div style={{ height: 2, width: 120, background: "#ff5b1f" }} />
-            <div style={{ height: 2, width: 392, background: "#2a2e35" }} />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 26 }}>
+            <span style={{ color: "#666666" }}>{footer}</span>
+            <span style={{ display: "flex", alignItems: "center", color: "#171717", fontWeight: 600 }}>
+              {site.name}
+              <span style={{ color: "#f26522" }}>.</span>
+            </span>
           </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: 24,
-            color: "#edeae3",
-          }}
-        >
-          <span>{footer}</span>
-          <span style={{ color: "#ff5b1f" }}>{site.name}</span>
         </div>
       </div>
     ),

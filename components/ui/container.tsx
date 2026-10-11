@@ -1,12 +1,9 @@
 import type { ComponentProps } from "react";
 import { cx } from "@/lib/cx";
 
-// Page gutter: 16px on phones, 24px from `sm`, content capped at 1440px.
+// Content width ~1240px, gutters 20px (phones) → 32px (tablet and up).
 export function Container({ className, ...props }: ComponentProps<"div">) {
   return (
-    <div
-      className={cx("mx-auto w-full max-w-[90rem] px-4 sm:px-6", className)}
-      {...props}
-    />
+    <div className={cx("mx-auto w-full max-w-[77.5rem] px-5 sm:px-8", className)} {...props} />
   );
 }

@@ -1,82 +1,120 @@
-// About-page content. Only real experience belongs here.
+// Biography, experience, education, capabilities and approach.
+// Only verified facts belong here. Fields marked TODO(content) are rendered
+// only once they have a value, and are listed by <DraftNotice /> in dev.
 
 export type ExperienceEntry = {
   role: string;
   company: string;
-  period: string;
+  current: boolean;
+  // TODO(content): e.g. "Mar 2026" — hidden until provided.
+  start: string;
+  end?: string;
   location?: string;
+  // TODO(content): one sentence on what you own in this role.
   summary: string;
-  highlights?: string[];
+  highlights: string[];
 };
 
-// TODO(content): add your real roles, most recent first. The Experience
-// section stays hidden until this list has at least one entry. Example shape:
-// {
-//   role: "Frontend Developer",
-//   company: "Company name",
-//   period: "2024 — Present",
-//   location: "Remote",
-//   summary: "One sentence on what you owned.",
-//   highlights: ["A concrete outcome", "Another concrete outcome"],
-// },
-export const experience: ExperienceEntry[] = [];
+export type EducationEntry = {
+  degree: string;
+  institution: string;
+  institutionShort: string;
+  location: string;
+  completed: string;
+};
 
-// TODO(content): replace with your own story — where you started, what you
-// build now and what you want to build next. Keep it to two short paragraphs.
-export const bio: string[] = [
-  "I'm Muhammad Zulqaif, a frontend developer based in Faisalabad, Pakistan. I work across two disciplines that usually live apart.",
-  "As a product frontend developer I care about the interfaces people use every day: clear state, keyboard-first interaction, and pages that load fast on real devices. As a creative developer I build the moments people remember — motion, real-time graphics and interaction with a reason to exist.",
+export const bio = [
+  "I'm Muhammad Zulqaif, a frontend developer based in Faisalabad, Pakistan. I work with React, Next.js and TypeScript to build responsive interfaces that are clear to use and solid underneath.",
+  "I care about the parts of frontend work that users feel but rarely notice: layouts that hold up on every screen, keyboard and screen-reader support, fast loading, and code that stays easy to change.",
 ];
 
-export const principles = [
+export const focus =
+  "Product-focused frontend engineering: turning designs and requirements into accessible, responsive and maintainable interfaces — with motion and interactive details where they genuinely help.";
+
+export const experience: ExperienceEntry[] = [
   {
-    title: "Fast by default",
-    body: "Performance is a feature you design for, not a fix you apply at the end.",
-  },
-  {
-    title: "Accessible by default",
-    body: "If it doesn't work with a keyboard or a screen reader, it isn't finished.",
-  },
-  {
-    title: "Motion with a reason",
-    body: "Animation should explain, guide or delight — never block the content.",
-  },
-  {
-    title: "Details are the work",
-    body: "Spacing, states and edge cases are where good interfaces separate from average ones.",
+    role: "Frontend Developer",
+    company: "Genius Mind Zone",
+    current: true,
+    start: "",
+    summary: "",
+    highlights: [],
   },
 ];
 
-// TODO(content): keep only what you can talk about confidently in an interview.
+export const education: EducationEntry[] = [
+  {
+    degree: "BS Computer Science",
+    institution: "Government College University Faisalabad",
+    institutionShort: "GCUF",
+    location: "Faisalabad, Pakistan",
+    completed: "2026",
+  },
+];
+
 export const capabilities = [
   {
-    track: "Product Frontend",
-    heading: "Interfaces people use every day",
-    items: [
-      "Component architecture and design systems",
-      "Accessible, keyboard-first UI",
-      "Performance and Core Web Vitals",
-      "Typed data flows with TypeScript",
-    ],
+    title: "Frontend engineering",
+    description:
+      "Component architecture, typed data flows and state that stays predictable as features grow.",
   },
   {
-    track: "Creative Development",
-    heading: "Moments people remember",
-    items: [
-      "Scroll and page-transition motion",
-      "Real-time 3D and shaders with WebGL",
-      "Generative and interactive visuals",
-      "Progressive enhancement and fallbacks",
-    ],
+    title: "React & Next.js",
+    description:
+      "App Router, Server Components, routing, metadata and static rendering with React 19 and Next.js.",
+  },
+  {
+    title: "Responsive UI",
+    description:
+      "Layouts built mobile-first with Tailwind CSS and checked at every breakpoint from 320px upward.",
+  },
+  {
+    title: "API integration",
+    description:
+      "Connecting interfaces to REST APIs with clear loading, empty and error states.",
+  },
+  {
+    title: "Design to code",
+    description:
+      "Translating designs into faithful, reusable components with consistent spacing, type and tokens.",
+  },
+  {
+    title: "Performance & accessibility",
+    description:
+      "Semantic HTML, keyboard support, contrast-checked colour and lean client-side JavaScript.",
   },
 ];
 
+export const approach = [
+  {
+    title: "Understand",
+    description: "Clarify goals, users, constraints and what “done” means before writing code.",
+  },
+  {
+    title: "Design & build",
+    description: "Implement the interface as reusable, responsive components that follow the design.",
+  },
+  {
+    title: "Integrate",
+    description: "Wire up data and APIs with real loading, empty and error states.",
+  },
+  {
+    title: "Test",
+    description: "Check behaviour across screen sizes, keyboard use, edge cases and build output.",
+  },
+  {
+    title: "Refine & deliver",
+    description: "Polish details, document what matters and ship a version that is easy to maintain.",
+  },
+];
+
+// The technologies you named as your main stack.
 export const stack = [
+  "React.js",
   "Next.js",
-  "React",
   "TypeScript",
+  "JavaScript",
   "Tailwind CSS",
-  "GSAP",
-  "Three.js",
-  "WebGL / GLSL",
+  "REST APIs",
+  "Responsive UI",
 ];

@@ -18,7 +18,7 @@ const defaultImage = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: `${site.name} — ${site.roles.join(" & ")}`,
+  alt: `${site.name} — ${site.role}`,
 };
 
 export function pageMetadata({ title, description, path, image }: PageMetadataInput): Metadata {
